@@ -43,18 +43,17 @@ class DataSearchActivity : AppCompatActivity() {
         //ViewModel 생성
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         recentViewModel = ViewModelProvider(this)[RecentViewModel::class.java]
-
+      
         //검색 결과 목록 세로 스크롤 설정
         searchDataListView.layoutManager = LinearLayoutManager(this)
         //최근 검색어 목록 가로 스크롤 설정
         recentSearchListView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
+            
         //어뎁터 초기화
         resultDataAdapter = SearchDataAdapter(emptyList(), recentViewModel)
         searchDataListView.adapter = resultDataAdapter
-
-
+      
         resetButtonListener()
         setTextWatcher()
 

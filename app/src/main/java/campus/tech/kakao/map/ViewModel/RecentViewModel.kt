@@ -19,6 +19,7 @@ class RecentViewModel(application: Application) : AndroidViewModel(application) 
     fun addRecentData(data: String, address: String, time: Long) {
         val currentList = _recentDataList.value.orEmpty().toMutableList()
         val selectData = RecentSearchData(data, address, time)
+
         if (checkExist(currentList, selectData)) {
             repository.insertSearchData(selectData)
         } else {
