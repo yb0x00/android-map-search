@@ -37,7 +37,7 @@ class SearchDataAdapter(
 
         holder.itemView.setOnClickListener {
             val searchTime = System.currentTimeMillis()
-            recentViewModel.addRecentData(item.name, searchTime)
+            recentViewModel.addRecentData(item.name,item.address, searchTime)
         }
     }
 

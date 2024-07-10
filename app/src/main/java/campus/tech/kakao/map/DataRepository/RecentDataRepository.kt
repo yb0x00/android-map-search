@@ -15,6 +15,7 @@ class RecentDataRepository(context: Context) {
     fun insertSearchData(data: RecentSearchData) {
         val cv = ContentValues().apply {
             put(RecentDataContract.TABLE_COLUMN_NAME, data.name)
+            put(RecentDataContract.TABLE_COLUMN_ADDRESS, data.address)
             put(RecentDataContract.TABLE_COLUMN_TIME, data.time)
         }
         wDb.insert(RecentDataContract.TABLE_NAME, null, cv)
@@ -35,21 +36,23 @@ class RecentDataRepository(context: Context) {
         while (cursor.moveToNext()) {
             val name =
                 cursor.getString(cursor.getColumnIndexOrThrow(RecentDataContract.TABLE_COLUMN_NAME))
+            val address =
+                cursor.getString(cursor.getColumnIndexOrThrow(RecentDataContract.TABLE_COLUMN_ADDRESS))
             val time =
                 cursor.getString(cursor.getColumnIndexOrThrow(RecentDataContract.TABLE_COLUMN_TIME))
 
-            recentDataList.add(RecentSearchData(name, time.toLong()))
+            recentDataList.add(RecentSearchData(name, address, time.toLong()))
         }
         cursor.close()
 
         return recentDataList
     }
 
-    fun deleteSearchData(data: String) {
+    fun deleteSearchData(data: String, address: String) {
         wDb.delete(
             RecentDataContract.TABLE_NAME,
-            "${RecentDataContract.TABLE_COLUMN_NAME} = ?",
-            arrayOf(data)
+            "${RecentDataContract.TABLE_COLUMN_NAME} = ? AND ${RecentDataContract.TABLE_COLUMN_ADDRESS} = ?",
+            arrayOf(data, address)
         )
     }
 

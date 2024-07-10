@@ -16,9 +16,9 @@ class RecentViewModel(application: Application) : AndroidViewModel(application) 
         _recentDataList.value = repository.getRecentSearchDataList()
     }
 
-    fun addRecentData(data: String, time: Long) {
+    fun addRecentData(data: String, address: String, time: Long) {
         val currentList = _recentDataList.value.orEmpty().toMutableList()
-        val selectData = RecentSearchData(data, time)
+        val selectData = RecentSearchData(data, address, time)
         if (checkExist(currentList, selectData)) {
             repository.insertSearchData(selectData)
         } else {
@@ -32,15 +32,15 @@ class RecentViewModel(application: Application) : AndroidViewModel(application) 
         currentList: MutableList<RecentSearchData>,
         data: RecentSearchData
     ): Boolean {
-        return !currentList.any { it.name == data.name }
+        return !currentList.any { it.name == data.name && it.address == data.address }
     }
 
     fun getRecentDataLiveData(): LiveData<List<RecentSearchData>> {
         return _recentDataList
     }
 
-    fun deleteRecentData(data: String) {
-        repository.deleteSearchData(data)
+    fun deleteRecentData(data: String, address: String) {
+        repository.deleteSearchData(data, address)
         _recentDataList.value = repository.getRecentSearchDataList()
     }
 }

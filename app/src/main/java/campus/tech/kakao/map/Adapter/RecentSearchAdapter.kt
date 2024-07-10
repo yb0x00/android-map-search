@@ -33,7 +33,7 @@ class RecentSearchAdapter(
         val viewHolder = holder as RecentViewHolder
         viewHolder.name.text = item.name
         viewHolder.deleteBtn.setOnClickListener {
-            viewModel.deleteRecentData(item.name)
+            viewModel.deleteRecentData(item.name, item.address)
         }
     }
 }
