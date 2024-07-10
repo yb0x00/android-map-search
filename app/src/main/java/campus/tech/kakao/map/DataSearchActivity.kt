@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import campus.tech.kakao.map.Adapter.RecentSearchAdapter
 import campus.tech.kakao.map.Adapter.SearchDataAdapter
-import campus.tech.kakao.map.Data.SearchData
 import campus.tech.kakao.map.ViewModel.RecentViewModel
 import campus.tech.kakao.map.ViewModel.SearchViewModel
 
@@ -24,25 +23,15 @@ class DataSearchActivity : AppCompatActivity() {
     private lateinit var recentViewModel: RecentViewModel
     private lateinit var editText: EditText
     private lateinit var resultDataAdapter: SearchDataAdapter
-    private lateinit var resultData: List<SearchData>
     private lateinit var searchDataListView: RecyclerView
     private lateinit var recentSearchListView: RecyclerView
     private lateinit var noResultNotice: TextView
     private lateinit var deleteBtn: ImageButton
 
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_search)
-
-        //ViewModel 생성
-        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-        //검색에 사용될 DB 생성
-        searchViewModel.makeSearchData()
-
-        //ViewModel 생성
-        recentViewModel = ViewModelProvider(this)[RecentViewModel::class.java]
 
         //View 초기화
         searchDataListView = findViewById(R.id.searchResulListView)
@@ -51,20 +40,36 @@ class DataSearchActivity : AppCompatActivity() {
         deleteBtn = findViewById(R.id.deleteInput)
         recentSearchListView = findViewById(R.id.recentSearchListView)
 
+        //ViewModel 생성
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        recentViewModel = ViewModelProvider(this)[RecentViewModel::class.java]
+
         //검색 결과 목록 세로 스크롤 설정
         searchDataListView.layoutManager = LinearLayoutManager(this)
         //최근 검색어 목록 가로 스크롤 설정
         recentSearchListView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
         //어뎁터 초기화
         resultDataAdapter = SearchDataAdapter(emptyList(), recentViewModel)
         searchDataListView.adapter = resultDataAdapter
+
 
         resetButtonListener()
         setTextWatcher()
 
         recentViewModel.getRecentDataLiveData().observe(this, Observer { recentData ->
             recentSearchListView.adapter = RecentSearchAdapter(recentData, recentViewModel)
+        })
+
+        searchViewModel.result.observe(this, Observer { documentsList ->
+            if (documentsList.isNotEmpty()) {
+                noResultNotice.visibility = View.GONE
+                resultDataAdapter.updateData(documentsList)
+            } else {
+                noResultNotice.visibility = View.VISIBLE
+                resultDataAdapter.updateData(emptyList())
+            }
         })
     }
 
@@ -74,10 +79,9 @@ class DataSearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchInput = editText.text.trim().toString()
-                resultData = searchViewModel.loadSearchData(searchInput)
-                if (searchInput.isNotEmpty() && resultData.isNotEmpty()) {
-                    noResultNotice.visibility = View.GONE
-                    resultDataAdapter.updateData(resultData)
+
+                if (searchInput.isNotEmpty()) {
+                    searchViewModel.loadResultMapData(searchInput)
                 } else {
                     noResultNotice.visibility = View.VISIBLE
                     resultDataAdapter.updateData(emptyList())

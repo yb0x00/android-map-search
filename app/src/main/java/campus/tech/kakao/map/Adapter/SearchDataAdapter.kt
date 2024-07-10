@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import campus.tech.kakao.map.Data.SearchData
 import campus.tech.kakao.map.R
 import campus.tech.kakao.map.ViewModel.RecentViewModel
+import campus.tech.kakao.map.retrofit.Document
 
 class SearchDataAdapter(
-    private var items: List<SearchData>,
+    private var items: List<Document>,
     private val recentViewModel: RecentViewModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -41,7 +41,7 @@ class SearchDataAdapter(
         }
     }
 
-    fun updateData(newItems: List<SearchData>) {
+    fun updateData(newItems: List<Document>) {
         items = newItems
         notifyDataSetChanged()
     }
