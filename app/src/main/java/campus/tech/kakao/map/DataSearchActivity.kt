@@ -1,6 +1,7 @@
 package campus.tech.kakao.map
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +9,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +30,7 @@ class DataSearchActivity : AppCompatActivity() {
     private lateinit var recentSearchListView: RecyclerView
     private lateinit var noResultNotice: TextView
     private lateinit var deleteBtn: ImageButton
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +74,15 @@ class DataSearchActivity : AppCompatActivity() {
                 resultDataAdapter.updateData(emptyList())
             }
         })
+
+        val onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@DataSearchActivity, HomeMapActivity::class.java)
+                startActivity(intent)
+                //Toast.makeText(this@DataSearchActivity,"홈 지도 화면으로 넘어갑니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     private fun setTextWatcher() {
