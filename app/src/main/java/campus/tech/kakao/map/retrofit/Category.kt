@@ -1,5 +1,6 @@
 package campus.tech.kakao.map.retrofit
 
+// "category_group_code"와 설명을 매칭하기 위한 객체
 object CategoryData {
     val descriptions = mapOf(
         "MT1" to "대형마트",

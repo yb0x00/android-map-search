@@ -1,4 +1,4 @@
-package campus.tech.kakao.map
+package campus.tech.kakao.map.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,17 +9,17 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import campus.tech.kakao.map.Adapter.RecentSearchAdapter
-import campus.tech.kakao.map.Adapter.SearchDataAdapter
-import campus.tech.kakao.map.ViewModel.RecentViewModel
-import campus.tech.kakao.map.ViewModel.SearchViewModel
+import campus.tech.kakao.map.R
+import campus.tech.kakao.map.adapter.RecentSearchAdapter
+import campus.tech.kakao.map.adapter.SearchDataAdapter
+import campus.tech.kakao.map.viewModel.RecentViewModel
+import campus.tech.kakao.map.viewModel.SearchViewModel
 
 class DataSearchActivity : AppCompatActivity() {
     private lateinit var searchViewModel: SearchViewModel
@@ -47,17 +47,17 @@ class DataSearchActivity : AppCompatActivity() {
         //ViewModel 생성
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         recentViewModel = ViewModelProvider(this)[RecentViewModel::class.java]
-      
+
         //검색 결과 목록 세로 스크롤 설정
         searchDataListView.layoutManager = LinearLayoutManager(this)
         //최근 검색어 목록 가로 스크롤 설정
         recentSearchListView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            
+
         //어뎁터 초기화
         resultDataAdapter = SearchDataAdapter(emptyList(), recentViewModel)
         searchDataListView.adapter = resultDataAdapter
-      
+
         resetButtonListener()
         setTextWatcher()
 
