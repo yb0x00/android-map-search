@@ -27,7 +27,8 @@
         android:paddingStart="20dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:elevation="20dp"/>
 
     <ImageButton
         android:id="@+id/clickForSearch_home"
