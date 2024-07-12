@@ -33,7 +33,11 @@ class SearchDataAdapter(
         val viewHolder = holder as SearchDataViewHolder
         viewHolder.name.text = item.name
         viewHolder.address.text = item.address
-        viewHolder.category.text = item.category
+        if (item.categoryCode.isNullOrEmpty()) {
+            viewHolder.category.text = item.categoryTail
+        } else {
+            viewHolder.category.text = item.categoryDescription
+        }
 
         holder.itemView.setOnClickListener {
             val searchTime = System.currentTimeMillis()
