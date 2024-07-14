@@ -10,7 +10,6 @@ import campus.tech.kakao.map.R
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.MapView
-import com.kakao.vectormap.KakaoMapSdk
 import com.kakao.vectormap.MapLifeCycleCallback
 import java.lang.Exception
 
@@ -23,9 +22,6 @@ class HomeMapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_home_map)
-
-        val key = getString(R.string.kakao_api_key)
-        KakaoMapSdk.init(this, key)
 
         mapView = findViewById(R.id.mapView)
         //KaKao Map UI에 띄우기
