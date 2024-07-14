@@ -14,7 +14,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val _searchDataList = MutableLiveData<List<Document>>()
 
     //"DataSearchActivity"에서 사용할 LiveData
-    val result: LiveData<List<Document>>
+    val searchResults: LiveData<List<Document>>
         get() = _searchDataList
 
     //API 데이터에서 "category_name" 문자열이 길기 때문에, 충분한 의미 전달이 되는 키워드를 임의로 추출

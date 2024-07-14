@@ -65,7 +65,7 @@ class DataSearchActivity : AppCompatActivity() {
             recentSearchListView.adapter = RecentSearchAdapter(recentData, recentViewModel)
         })
 
-        searchViewModel.result.observe(this, Observer { documentsList ->
+        searchViewModel.searchResults.observe(this, Observer { documentsList ->
             if (documentsList.isNotEmpty()) {
                 noResultNotice.visibility = View.GONE
                 resultDataAdapter.updateData(documentsList)
