@@ -1,40 +1,48 @@
-package campus.tech.kakao.map.dataRepository
+package campus.tech.kakao.map.DataRepository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import campus.tech.kakao.map.retrofit.CategoryData
-import campus.tech.kakao.map.retrofit.Document
-import campus.tech.kakao.map.retrofit.RetrofitAPI.getResultFromAPI
+import android.content.Context
+import android.util.Log
+import campus.tech.kakao.map.BuildConfig
+import campus.tech.kakao.map.Data.SearchData
+import campus.tech.kakao.map.retrofit.MapSearchResponse
+import campus.tech.kakao.map.retrofit.RetrofitService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-class SearchDataRepository(){
-    private val _searchDataList = MutableLiveData<List<Document>>()
-    val searchResults: LiveData<List<Document>>
-        get() = _searchDataList
+class SearchDataRepository(context: Context) {
+    val searchResultList: MutableList<SearchData> = mutableListOf()
 
-    //검색 결과 가공 후 LiveData에 저장
-    fun loadResultMapData(data: String) {
-        getResultFromAPI(data) { response ->
-            if (response.isSuccessful) {
-                val body = response.body()
-                body?.documents?.let { documents ->
-                    val updatedDocuments = documents.map { document ->
-                        val descriptionFromCode = CategoryData.descriptions[document.categoryCode]
-                        val descriptionFromCategory = getTailCategory(document.category)
-                        val updateDocument = document.copy(
-                            categoryDescription = descriptionFromCode,
-                            categoryTail = descriptionFromCategory
-                        )
-                        updateDocument
-                    }
-                    _searchDataList.postValue(updatedDocuments)
-                }
-            }
-        }
+    //실제 사용될 때 Retrofit 객체 생성
+    private val retrofitService: RetrofitService by lazy {
+        Log.d("yeong", "Use Retrofit!")
+        Retrofit.Builder()
+            .baseUrl("https://dapi.kakao.com/v2/local/search/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(RetrofitService::class.java)
     }
 
-    //API 데이터에서 "category_name" 문자열이 길기 때문에, 충분한 의미 전달이 되는 키워드를 임의로 추출
-    private fun getTailCategory(category: String): String {
-        val parts = category.split(">")
-        return if (parts.size > 1) parts[1].trim() else parts.last().trim()
+    //검색 결과 from API
+    fun getResultFromAPI(keyword: String, callback: (Response<MapSearchResponse>) -> Unit) {
+        val apiKey = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}"
+
+        retrofitService.requestResults(apiKey, keyword)
+            .enqueue(object : Callback<MapSearchResponse> {
+                override fun onResponse(
+                    call: Call<MapSearchResponse>,
+                    response: Response<MapSearchResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        callback(response)
+                    }
+                }
+
+                override fun onFailure(call: Call<MapSearchResponse>, t: Throwable) {
+                    Log.d("API", "error : $t")
+                }
+            })
     }
 }
