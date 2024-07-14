@@ -93,7 +93,7 @@ class DataSearchActivity : AppCompatActivity() {
                 val searchInput = editText.text.trim().toString()
 
                 if (searchInput.isNotEmpty()) {
-                    searchViewModel.loadResultMapData(searchInput)
+                    searchViewModel.loadResultData(searchInput)
                 } else {
                     noResultNotice.visibility = View.VISIBLE
                     resultDataAdapter.updateData(emptyList())
