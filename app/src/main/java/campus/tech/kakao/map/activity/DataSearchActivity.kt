@@ -31,6 +31,7 @@ class DataSearchActivity : AppCompatActivity() {
     private lateinit var noResultNotice: TextView
     private lateinit var deleteBtn: ImageButton
 
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,7 @@ class DataSearchActivity : AppCompatActivity() {
         //어뎁터 초기화
         resultDataAdapter = SearchDataAdapter(emptyList(), recentViewModel)
         searchDataListView.adapter = resultDataAdapter
-      
+
         resetButtonListener()
         setTextWatcher()
 
