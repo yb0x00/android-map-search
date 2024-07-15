@@ -78,8 +78,8 @@ class DataSearchActivity : AppCompatActivity() {
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val intent = Intent(this@DataSearchActivity, HomeMapActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
-                //Toast.makeText(this@DataSearchActivity,"홈 지도 화면으로 넘어갑니다", Toast.LENGTH_SHORT).show()
             }
         }
         this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
